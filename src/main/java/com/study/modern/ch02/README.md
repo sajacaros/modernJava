@@ -101,9 +101,103 @@
 * 값 파라미터 vs 동작 파라미터
     - ![](images/parameterization.png)
 ##### 2.3.4 일곱 번째 시도 : 리스트 형식으로 추상화
+* 리스트 형식으로 추상화
+    ``` 
+    public interface Predicate<T> {
+        boolean test(T t);
+    }
+    public static <T> List<T> filter(List<T> list, Predicate<T> p) {
+        List<T> result = new ArrayList<>();
+        for(T e: list) {
+            if(p.test(e)) {
+                result.add(e);
+            }
+        }
+        return result;
+    }
+    List<Apple> redApples =
+        filter(inventory, (Apple apple) -> RED.equals(apple.getColor()));
+    List<Integer> evenNumbers =
+        filter(numbers, (Integer i) -> i % 2 == 0);
+    ```
 #### 2.4 실전 예제
 ##### 2.4.1 Comparator로 정렬하기
+* [List.sort](https://docs.oracle.com/javase/8/docs/api/java/util/List.html#sort-java.util.Comparator-)
+    - Comparator
+    ``` 
+    // java.util.Comparator
+    public interface Comparator<T> {
+        int compare(T o1, T o2);
+    }
+    ```
+    - 익명 클래스
+    ```
+    inventory.sort(new Comparator<Apple>() {
+        public int compare(Apple a1, Apple a2) {
+            return a1.getWeight().compareTo(a2.getWeight());
+        }
+    });
+    ```
+    - 람다
+    ```
+    inventory.sort((Apple a1, Apple a2) -> a1.getWeight().compareTo(a2.getWeight()));    
+    ```
+* Lower-Bounded 이해하기
+    - ```default void sort(Comparator<? super E> c)```
+    - [UpperBoundTest](generic/UpperBoundTest.java)
 ##### 2.4.2 Runnable로 코드 블록 실행하기
+* Runnable
+``` 
+public interface Runnable {
+    void run();
+}
+```
+* 익명 클래스
+``` 
+Thread t = new Thread(new Runnable() {
+    public void run() {
+        System.out.println("Hello world");
+    }
+});
+```
+* 람다
+```
+Thread t = new Thread(() -> System.out.println("Hello world"));
+```
 ##### 2.4.3 Callable로 결과 반환하기
+* Callable
+``` 
+public interface Callable<V> {
+    V call();
+}
+```
+* 익명 클래스
+``` 
+ExecutorService executorService = Executors.newCachedThreadPool();
+Future<String> threadName = executorService.submit(new Callable<String>() {
+    @Override
+    public String call() throws Exception {
+        return Thread.currentThread().getName();
+    }
+});
+```
+* 람다
+``` 
+Future<String> threadName = executorService.submit(
+                     () -> Thread.currentThread().getName());
+```
 ##### 2.4.4 GUI 이벤트 처리하기
+* 익명 클래스
+``` 
+Button button = new Button("Send");
+button.setOnAction(new EventHandler<ActionEvent>() {
+    public void handle(ActionEvent event) {
+        label.setText("Sent!!");
+    }
+});
+```
+* 람다
+``` 
+button.setOnAction((ActionEvent event) -> label.setText("Sent!!"));
+```
 #### 2.5 마치며
