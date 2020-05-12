@@ -1,9 +1,12 @@
 ### [CHAPTER 3 람다 표현식](https://livebook.manning.com/book/modern-java-in-action/chapter-3/)
 
 #### 3.1 람다란 무엇인가?
+* ![](images/quiz_3.1.png)
 #### 3.2 어디에, 어떻게 람다를 사용할까?
 ##### 3.2.1 함수형 인터페이스
+* ![](images/quiz_3.2.png)
 ##### 3.2.2 함수 디스크립터
+* ![](images/quiz_3.3.png)
 #### 3.3 람다 활용 : 실행 어라운드 패턴
 ##### 3.3.1 1단계 : 동작 파라미터화를 기억하라
 ##### 3.3.2 2단계 : 함수형 인터페이스를 이용해서 동작 전달
@@ -13,14 +16,21 @@
 ##### 3.4.1 Predicate
 ##### 3.4.2 Consumer
 ##### 3.4.3 Function
+* ![](images/functionalInterfaces.png)
+* ![](images/quiz_3.4.png)
+* ![](images/lambdaMaching.png)
 #### 3.5 형식 검사, 형식 추론 제약
 ##### 3.5.1 형식 검사
 ##### 3.5.2 같은 람다, 다른 함수형 인터페이스
+* ![](images/quiz_3.5.png)
 ##### 3.5.3 형식 추론
 ##### 3.5.4 지역 변수 사용
 #### 3.6 메서드 참조
 ##### 3.6.1 요약
+* ![](images/methodReferences.png)
+* ![](images/quiz_3.6.png)
 ##### 3.6.2 생성자 참조
+* ![](images/quiz_3.7.png)
 #### 3.7 람다, 메서드 참조 활용하기
 ##### 3.7.1 1단계 : 코드 전달
 ##### 3.7.2 2단계 : 익명 클래스 사용
