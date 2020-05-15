@@ -144,7 +144,7 @@
     ```
 * Lower-Bounded 이해하기
     - ```default void sort(Comparator<? super E> c)```
-    - [UpperBoundTest](generic/UpperBoundTest.java)
+    - [UpperBoundTest](../../../src/main/java/com/study/modern/ch02/generic/UpperBoundTest.java)
 ##### 2.4.2 Runnable로 코드 블록 실행하기
 * Runnable
 ``` 

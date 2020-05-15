@@ -1,4 +1,4 @@
-package com.study.modern.ch02.generic;
+package com.study.modern.ch02;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
