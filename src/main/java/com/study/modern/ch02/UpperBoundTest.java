@@ -12,18 +12,19 @@ public class UpperBoundTest {
         }
     }
 
-    public static class HumanComparator implements Comparator<Human> {
-        @Override
-        public int compare(Human h1, Human h2) {
-            return h1.getIntelligence()-h2.getIntelligence();
-        }
-    }
-
     public static class AnimalComparator implements Comparator<Animal> {
         @Override
         public int compare(Animal a1, Animal a2) {
             return a1.getAge() - a2.getAge();
         }
+    }
+
+    public static class HumanComparator implements Comparator<Human> {
+        @Override
+        public int compare(Human h1, Human h2) {
+            return h1.getIntelligence()-h2.getIntelligence();
+        }
+
     }
 
     public static class ManComparator implements Comparator<Man> {

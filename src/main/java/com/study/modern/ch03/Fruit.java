@@ -1,38 +1,33 @@
 package com.study.modern.ch03;
 
+import lombok.RequiredArgsConstructor;
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.function.IntFunction;
 
 public interface Fruit {
-    enum Type {
+    enum FruitType {
         APPLE(Apple::new), ORANGE(Orange::new);
 
         IntFunction<Fruit> fruitFunction;
-        Type(IntFunction<Fruit> fruitFunction) {
+        FruitType(IntFunction<Fruit> fruitFunction) {
             this.fruitFunction = fruitFunction;
         }
-    }
 
-    static Fruit createFruit(Fruit.Type fruitType, int weight) {
-        return fruitType.fruitFunction.apply(weight);
+        Fruit apply(int weight) {
+            return fruitFunction.apply(weight);
+        }
     }
 
     @ToString
+    @RequiredArgsConstructor
     class Apple implements Fruit{
         private final int weight;
-        Apple(int weight) {
-            this.weight = weight;
-        }
     }
 
     @ToString
-    @Slf4j
+    @RequiredArgsConstructor
     class Orange implements Fruit{
         private final int weight;
-        Orange(int weight) {
-            this.weight = weight;
-        }
     }
 }
