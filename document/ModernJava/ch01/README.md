@@ -32,7 +32,7 @@
     - 한 프로그램의 출력 스트림은 다른 프로그램의 입력 스트림이 될 수 있음
     - 스트림과 관련된 유닉스 명령
         - ```cat file1 file2 | tr "[A-Z]" "[a-z]" | sort | tail -3```
-        - ![](images/unix.jpg)
+        - ![](./images/unix.jpg)
         - 명령어들을 병렬로 처리함
         - cat이나 tr이 완료되지 않은 시점에서 sort행을 처리하기 시작할 수 있음
 * 자바에서의 스트림
@@ -42,7 +42,7 @@
 * 동작 파라미터화(behavior parameterization)
     - 코드 일부를 API로 전달하는 기능
     - 메서드를 다른 메서드의 인자로 넘겨주는 기능을 제공
-    - ![sort 인자로 메소드 전달](images/sort.jpg)
+    - ![sort 인자로 메소드 전달](./images/sort.jpg)
 ##### 1.2.4 병렬성과 공유 가변 데이터
 * 스트림 메서드로 전달하는 코드는 스레드에 안전해야 함
     - 공유된 가변 데이터에 접근하지 않아야 함
@@ -67,7 +67,7 @@
     File[] hiddenFiles = new File(".").listFiles(File::isHidden);
     ```
     - 자바8에서는 더 이상 메서드가 이급값이 아닌 일급값임
-    ![](images/methodReference.png)
+    ![](./images/methodReference.png)
 ##### 1.3.2 코드 넘겨주기 : 예제
 * 자바 8 이전 필터
     - 녹색 사과 고르기
@@ -164,7 +164,7 @@
         - 내부 반복(internal iteration, 4장 참고)
 ##### 1.4.1 멀티스레딩은 어렵다
 * 스트림 API는 컬렉션을 처리하면서 발생하는 문제와 멀티코어 활용 어려운 문제를 해결
-    - ![](images/forkAndJoin.png)
+    - ![](./images/forkAndJoin.png)
 * 컬렉션은 데이터를 어떻게 저장하고 접근할지에 중점을 둠
 * 스트림은 데이터를 어떻게 다룰지에 중점을 둠
 #### 1.5 디폴트 메서드와 자바 모듈

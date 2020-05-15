@@ -58,7 +58,7 @@ List<String> lowCaloricDishesName =
     - 선언형 : 간결하고 가독성이 좋음
     - 조립할 수 있음 : 유연성이 좋음
     - 병렬화 : 성능 향상
-* [Dish 클래스](Dish.java)
+* [Dish 클래스](../../../src/main/java/com/study/modern/ch04/Dish.java)
 #### 4.2 스트림 시작하기
 * 스트림이란?
     - 데이터 처리 연산을 지원하도록 소스에서 추출된 연속된 요소(Sequence of element)
