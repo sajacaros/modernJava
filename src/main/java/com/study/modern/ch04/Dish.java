@@ -16,7 +16,7 @@ public class Dish {
     private final int calories;
     private final Type type;
 
-    private enum Type {
+    public enum Type {
         MEAT, FISH, OTHER
     }
 
