@@ -199,15 +199,137 @@
 * [Exercise](../../../src/test/java/com/study/modern/ch05/ExerciseTest.java)
 
 #### 5.7 숫자형 스트림
+* reduce를 이용해 sum 구현
+    ```
+    int calories = menu.stream()
+           .map(Dish::getCalories)
+           .reduce(0, Integer::sum); 
+    ```
+* sum 메서드는 지원이 왜 안 될까?
+    ``` 
+    // wrong code
+    int calories = menu.stream()
+           .map(Dish::getCalories)
+           .sum(); 
+    ```
+    - stream은 다양한 자료형을 처리함으로 sum을 지원안하는 경우 발생
 ##### 5.7.1 기본형 특화 스트림
+* 숫자 스트림으로 매핑
+    ``` 
+    int calories = menu.stream()
+                   .mapToInt(Dish::getCalories) // IntStream 반환
+                   .sum();
+    ```
+    - mapToInt, mapToDouble, mapToLong 등을 이용하면 특화된 스트림 반환
+* 객체 스트림으로 복원하기
+    - boxed 메서드를 이용해서 특화 스트림을 일반 스트림으로 변환
+    ``` 
+    IntStream intStream = menu.stream().mapToInt(Dish::getCalories);
+    Stream<Integer> stream = intStream.boxed();
+    ```
+* 기본값 : OptionalInt
+    ``` 
+    int max = transactions.stream()
+        .map(Transaction::getValue)
+        .max(Integer::compareTo)
+        .orElse(0);
+    
+    int max = transactions.stream()
+        .map(Transaction::getValue)
+        .reduce(0, (a,b)->a>b?a:b);
+    ```
+    - 위 코드에서 최대값과 디폴트 값을 구분할 수 있는가?
+    ``` 
+    OptionalInt min = transactions.stream()
+                .mapToInt(Transaction::getValue)
+                .max();
+    ```
 ##### 5.7.2 숫자 범위
+* IntStream과 LongStream에서는 range와 rangeClosed 정적 메서드 제공
+    - [링크](https://docs.oracle.com/javase/8/docs/api/java/util/stream/IntStream.html#range-int-int-)
+    ``` 
+    IntStream evenNumbers = IntStream.rangeClosed(1, 100)
+                                     .filter(n -> n % 2 == 0);
+    ```
 ##### 5.7.3 숫자 스트림 활용 : 피타고라스 수
-
+* 피타고라스 수
+    - a * a + b * b = c * c
+    - 9 + 16 = 25 => 3,4,5
+    ``` 
+    Stream<int[]> pythagoreanTriples =
+        IntStream.rangeClosed(1, 100).boxed()
+            .flatMap(a ->
+                IntStream.rangeClosed(a, 100)
+                    .filter(b -> Math.sqrt(a*a + b*b) % 1 == 0)
+                    .mapToObj(b -> new int[]{a, b, (int)Math.sqrt(a * a + b * b)})
+            );
+    ```
+    - Math.sqrt(a*a + b*b) 중복됨 - 개선 필요
+    ```
+    Stream<int[]> pythagoreanTriples =
+        IntStream.rangeClosed(1, 100).boxed()
+            .flatMap(a ->
+                IntStream.rangeClosed(a, 100)
+                    .mapToObj(b -> new double[]{a, b,Math.sqrt(a * a + b * b)})
+                    .filter(t -> t[2] % 1 == 0)
+            ); 
+    ```
+        
 #### 5.8 스트림 만들기
 ##### 5.8.1 값으로 스트림 만들기
+* [Stream.of 정적 메서드](https://docs.oracle.com/javase/8/docs/api/java/util/stream/Stream.html#of-T...-)
+    ```
+    Stream<String> stream = Stream.of("Modern ", "Java ", "In ", "Action");
+    Stream<String> emptyStream = Stream.empty(); 
+    ```
 ##### 5.8.2 null이 될 수 있는 객체로 스트림 만들기
+* [Stream.ofNullable 정적 메서드](https://docs.oracle.com/javase/9/docs/api/java/util/stream/Stream.html#ofNullable-T-)
+    ``` 
+    Stream<String> homeValueStream
+        = Stream.ofNullable(System.getProperty("home"));
+    ```
 ##### 5.8.3 배열로 스트림 만들기
+* [Arrays.stream 정적 메서드](https://docs.oracle.com/javase/8/docs/api/java/util/Arrays.html#stream-T:A-)
+    ```
+    int[] numbers = {2, 3, 5, 7, 11, 13};
+    int sum = Arrays.stream(numbers).sum();
+    ```
 ##### 5.8.4 파일로 스트림 만들기
+* java.nio.file.Files의 많은 정적 메서드가 스트림 반환
+* 단어수 세기
+    ```
+    long uniqueWords = 0;
+    try(Stream<String> lines =
+            Files.lines(Paths.get("data.txt"), Charset.defaultCharset())){
+        uniqueWords = lines.flatMap(line -> Arrays.stream(line.split(" ")))
+                     .distinct()
+                     .count();
+    } catch(IOException e){
+    
+    } 
+    ```
 ##### 5.8.5 함수로 무한 스트림 만들기
-
+* ```Stream.iterate```와 ```Stream.generate``` 제공
+    - 무한 스트림을 만듬
+        - 언바운드 스트림(unbounded stream)이라 부름
+* [iterate 메서드](https://docs.oracle.com/javase/9/docs/api/java/util/stream/Stream.html#iterate-T-java.util.function.UnaryOperator-)
+    - 0부터 100까지 4씩 증가 시키는 스트림
+    ``` 
+    IntStream.iterate(0, n -> n < 100, n -> n + 4)
+             .forEach(System.out::println);
+    ```
+    - takeWhile 이용
+    ``` 
+    IntStream.iterate(0, n -> n + 4)
+             .takeWhile(n -> n < 100)
+             .forEach(System.out::println);
+    ```
+* [generate 메서드](https://docs.oracle.com/javase/9/docs/api/java/util/stream/Stream.html#generate-java.util.function.Supplier-)
+    - Supplier<T>를 인수로 받아서 새로운 값을 생산
+    - limit(n) 함수를 사용하지 않으면 unbounded 상태
+    ```
+     Stream.generate(Math::random)
+           .limit(5)
+           .forEach(System.out::println);
+    ```
 #### 5.9 마치며 

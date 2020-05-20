@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.OptionalInt;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -143,5 +144,13 @@ public class ExerciseTest {
             .min(Integer::compareTo)
             .orElse(0);
         assertThat(300, is(min));
+    }
+
+    @Test
+    public void min_for_transaction2() {
+        OptionalInt min = transactions.stream()
+            .mapToInt(Transaction::getValue)
+            .min();
+        assertThat(300, is(min.getAsInt()));
     }
 }
