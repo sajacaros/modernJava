@@ -29,8 +29,14 @@ public class ItersectionTest {
     }
 
     @Test
-    public void intersection1Empty(){ // boundary
+    public void intersection1EmptySetList(){ // boundary
         Set<String> test = intersection1(Arrays.asList(Collections.emptySet()));
+        assertTrue(test.isEmpty());
+    }
+
+    @Test
+    public void intersection1EmptyList(){ // boundary
+        Set<String> test = intersection1(Collections.emptyList());
         assertTrue(test.isEmpty());
     }
 
@@ -42,27 +48,60 @@ public class ItersectionTest {
     }
 
     @Test
-    public void intersection2Empty(){ // boundary
+    public void intersection2EmptySetList(){ // boundary
         Set<String> test = intersection2(Arrays.asList(Collections.emptySet()));
+        assertTrue(test.isEmpty());
+    }
+
+    @Test
+    public void intersection2EmptyList(){ // boundary
+        Set<String> test = intersection2(Collections.emptyList());
+        assertTrue(test.isEmpty());
+    }
+
+    @Test
+    public void intersection3Test(){
+        Set<String> test = intersection3(setList);
+        assertEquals(1, test.size());
+        assertTrue(test.contains("3"));
+    }
+
+    @Test
+    public void intersection3EmptySetList(){ // boundary
+        Set<String> test = intersection3(Arrays.asList(Collections.emptySet()));
+        assertTrue(test.isEmpty());
+    }
+
+    @Test
+    public void intersection3EmptyList(){ // boundary
+        Set<String> test = intersection3(Collections.emptyList());
         assertTrue(test.isEmpty());
     }
 
     private Set<String> intersection1(List<Set<String>> setList) {
         return setList.stream()
             .reduce((a, b) -> a.stream()
-                .filter(ele -> b.contains(ele))
+                .filter(element -> b.contains(element))
                 .collect(Collectors.toSet()))
             .orElse(Collections.emptySet());
     }
 
     private Set<String> intersection2(List<Set<String>> setList) {
-
         return setList.stream()
             .findFirst()
-            .map(HashSet::new)
             .map(first->setList.stream()
                 .skip(1)
-                .collect(()->first, Set::retainAll, Set::retainAll))
+                .collect(()->new HashSet(first), Set::retainAll, Set::retainAll))
             .orElseGet(HashSet::new);
+    }
+
+    private Set<String> intersection3(List<Set<String>> setList) {
+        if(setList.isEmpty() ) {
+            return Collections.emptySet();
+        }
+        Set<String> first = setList.get(0);
+        return setList.stream()
+                .skip(1)
+                .collect(()->new HashSet(first), Set::retainAll, Set::retainAll);
     }
 }

@@ -197,6 +197,7 @@
 * [Transaction](../../../src/main/java/com/study/modern/ch05/Transaction.java)
 ##### 5.6.2 실전 연습 정답
 * [Exercise](../../../src/test/java/com/study/modern/ch05/ExerciseTest.java)
+
 #### 5.7 숫자형 스트림
 ##### 5.7.1 기본형 특화 스트림
 ##### 5.7.2 숫자 범위
