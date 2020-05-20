@@ -6,10 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
-import static java.util.stream.Collectors.flatMapping;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -19,33 +16,33 @@ public class ItersectionTest {
     @BeforeEach
     public void init() {
         setList = Arrays.asList(
-            Set.of("1", "2", "3"),
-            Set.of("2", "3", "4"),
-            Set.of("3", "5", "7"));
+                Set.of("1", "2", "3"),
+                Set.of("2", "3", "4"),
+                Set.of("3", "5", "7"));
     }
 
     @Test
-    public void intersection1Test() {
+    public void intersection1Test(){
         Set<String> test = intersection1(setList);
         assertEquals(1, test.size());
         assertTrue(test.contains("3"));
     }
 
     @Test
-    public void intersection1Empty() { // boundary
+    public void intersection1Empty(){ // boundary
         Set<String> test = intersection1(Arrays.asList(Collections.emptySet()));
         assertTrue(test.isEmpty());
     }
 
     @Test
-    public void intersection2Test() {
+    public void intersection2Test(){
         Set<String> test = intersection2(setList);
         assertEquals(1, test.size());
         assertTrue(test.contains("3"));
     }
 
     @Test
-    public void intersection2Empty() { // boundary
+    public void intersection2Empty(){ // boundary
         Set<String> test = intersection2(Arrays.asList(Collections.emptySet()));
         assertTrue(test.isEmpty());
     }
@@ -63,9 +60,9 @@ public class ItersectionTest {
         return setList.stream()
             .findFirst()
             .map(HashSet::new)
-            .map(first -> setList.stream()
+            .map(first->setList.stream()
                 .skip(1)
-                .collect(() -> first, Set::retainAll, Set::retainAll))
+                .collect(()->first, Set::retainAll, Set::retainAll))
             .orElseGet(HashSet::new);
     }
 }
