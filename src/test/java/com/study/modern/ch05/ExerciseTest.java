@@ -11,7 +11,8 @@ import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 public class ExerciseTest {
@@ -47,7 +48,6 @@ public class ExerciseTest {
             assertTrue(previousTransaction.getValue() <= currentTransaction.getValue());
             previousTransaction = currentTransaction;
         }
-
     }
 
     //    2. 거래자가 근무하는 모든 도시를 중복 없이 나열
