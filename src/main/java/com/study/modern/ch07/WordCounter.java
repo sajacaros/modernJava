@@ -18,7 +18,6 @@ public class WordCounter {
         this.lastSpace = lastSpace;
     }
 
-
     public WordCounter(int counter, boolean lastSpace, List<Character> word) {
         this.counter = counter;
         this.lastSpace = lastSpace;
@@ -34,9 +33,8 @@ public class WordCounter {
         if (Character.isWhitespace(c)) {
             return lastSpace ?
                 this :
-                new WordCounter(counter, true, c);
+                new WordCounter(counter, true);
         } else {
-
             if(lastSpace) {
                 return new WordCounter(counter+1, false, c);
             } else {
@@ -46,10 +44,12 @@ public class WordCounter {
         }
     }
     public WordCounter combine(WordCounter wordCounter) {
-        log.info("{}, {}",this.word, wordCounter.word);
+        int left = this.word.isEmpty()?0:this.counter;
+        int right = wordCounter.word.isEmpty()?0:wordCounter.counter;
+        log.info("left : {}, word: {}, right: {}, word: {}", left, this.word, right, wordCounter.word);
         List<Character> words = new ArrayList(this.word);
         words.addAll(wordCounter.word);
-        return new WordCounter(counter + wordCounter.counter,
+        return new WordCounter(left+right,
             wordCounter.lastSpace, words);
     }
     public int getCounter() {
