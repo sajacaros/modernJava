@@ -1,29 +1,56 @@
 package com.study.modern.ch07;
 
+import lombok.extern.slf4j.Slf4j;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+@Slf4j
 public class WordCounter {
     private final int counter;
     private final boolean lastSpace;
+    private final List<Character> word = new ArrayList();
+
     public WordCounter(int counter, boolean lastSpace) {
         this.counter = counter;
         this.lastSpace = lastSpace;
+    }
+
+
+    public WordCounter(int counter, boolean lastSpace, List<Character> word) {
+        this.counter = counter;
+        this.lastSpace = lastSpace;
+        this.word.addAll(word);
+    }
+
+    public WordCounter(int counter, boolean lastSpace, Character c) {
+        this.counter = counter;
+        this.lastSpace = lastSpace;
+        this.word.add(c);
     }
     public WordCounter accumulate(Character c) {
         if (Character.isWhitespace(c)) {
             return lastSpace ?
                 this :
-                new WordCounter(counter, true);
+                new WordCounter(counter, true, c);
         } else {
-            return lastSpace ?
-                new WordCounter(counter+1, false) :
-                this;
+
+            if(lastSpace) {
+                return new WordCounter(counter+1, false, c);
+            } else {
+                word.add(c);
+                return this;
+            }
         }
     }
     public WordCounter combine(WordCounter wordCounter) {
+        log.info("{}, {}",this.word, wordCounter.word);
+        List<Character> words = new ArrayList(this.word);
+        words.addAll(wordCounter.word);
         return new WordCounter(counter + wordCounter.counter,
-            wordCounter.lastSpace);
+            wordCounter.lastSpace, words);
     }
     public int getCounter() {
         return counter;
@@ -45,6 +72,4 @@ public class WordCounter {
             WordCounter::combine);
         return wordCounter.getCounter();
     }
-
-
 }
