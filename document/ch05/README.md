@@ -193,10 +193,10 @@
 7. 전체 트랜잭션 중 최댓값
 8. 전체 트랜잭션 중 최소값
 ##### 5.6.1 거래자와 트랜잭션
-* [Trader](../../../src/main/java/com/study/modern/ch05/Trader.java)
-* [Transaction](../../../src/main/java/com/study/modern/ch05/Transaction.java)
+* [Trader](../../src/main/java/com/study/modern/ch05/Trader.java)
+* [Transaction](../../src/main/java/com/study/modern/ch05/Transaction.java)
 ##### 5.6.2 실전 연습 정답
-* [Exercise](../../../src/test/java/com/study/modern/ch05/ExerciseTest.java)
+* [Exercise](../../src/test/java/com/study/modern/ch05/ExerciseTest.java)
 
 #### 5.7 숫자형 스트림
 * reduce를 이용해 sum 구현

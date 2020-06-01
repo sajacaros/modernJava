@@ -1,20 +1,20 @@
 # Modern Java In Action v2019
 
 ## 1주차
-### [CHAPTER 1 자바 8, 9, 10, 11 : 무슨 일이 일어나고 있는가?](document/ModernJava/ch01/README.md)
-### [CHAPTER 2 동작 파라미터화 코드 전달하기](document/ModernJava/ch02/README.md)
+### [CHAPTER 1 자바 8, 9, 10, 11 : 무슨 일이 일어나고 있는가?](document/ch01/README.md)
+### [CHAPTER 2 동작 파라미터화 코드 전달하기](document/ch02/README.md)
 
 ## 2주차
-### [CHAPTER 3 람다 표현식](document/ModernJava/ch03/README.md)
-### [CHAPTER 4 스트림 소개](document/ModernJava/ch04/README.md)
+### [CHAPTER 3 람다 표현식](document/ch03/README.md)
+### [CHAPTER 4 스트림 소개](document/ch04/README.md)
 
 ## 3주차
-### [CHAPTER 5 스트림 활용](document/ModernJava/ch05/README.md)
-### [CHAPTER 6 스트림으로 데이터 수집](document/ModernJava/ch06/README.md)
+### [CHAPTER 5 스트림 활용](document/ch05/README.md)
+### [CHAPTER 6 스트림으로 데이터 수집](document/ch06/README.md)
 
 ## 4주차
-### [CHAPTER 7 병렬 데이터 처리와 성능](document/ModernJava/ch07/README.md)
-### [CHAPTER 8 컬렉션 API 개선](document/ModernJava/ch08/README.md)
+### [CHAPTER 7 병렬 데이터 처리와 성능](document/ch07/README.md)
+### [CHAPTER 8 컬렉션 API 개선](document/ch08/README.md)
 
 ## 5주차
 ### [CHAPTER 9 리팩터링, 테스팅, 디버깅](document/ModernJava/ch09/README.md)
