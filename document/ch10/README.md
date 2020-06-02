@@ -181,11 +181,96 @@ List<String> errors = Files.lines(Paths.get(fileName))
 * [main](../../src/main/java/com/study/modern/ch10/mixed/MixedMain.java)
 * [구현 소스](../../src/main/java/com/study/modern/ch10/mixed/MixedOrderBuilder.java)
 * 특징
-    - 
+    - 여러 패턴의 장점을 활용
+    - DSL 문법을 익히는데 오래 걸림
 
 ##### 10.3.5 DSL에 메서드 참조 사용하기
+``` 
+public class Tax {
+    public static double regional(double value) {
+        return value * 1.1;
+    }
 
+    public static double general(double value) {
+        return value * 1.3;
+    }
+
+    public static double surcharge(double value) {
+        return value * 1.05;
+    }
+}
+```
+
+``` 
+public static double calculate(Order order, boolean useRegional,
+                               boolean useGeneral, boolean useSurcharge) {
+    double value = order.getValue();
+    if (useRegional) value = Tax.regional(value);
+    if (useGeneral) value = Tax.general(value);
+    if (useSurcharge) value = Tax.surcharge(value);
+    return value;
+}
+```
+
+``` 
+double value = calculate(order, true, false, true);
+```
+
+```
+public class TaxCalculator {
+    private boolean useRegional;
+    private boolean useGeneral;
+    private boolean useSurcharge;
+
+    public TaxCalculator withTaxRegional() {
+        useRegional = true;
+        return this;
+    }
+
+    public TaxCalculator withTaxGeneral() {
+        useGeneral= true;
+        return this;
+    }
+
+    public TaxCalculator withTaxSurcharge() {
+        useSurcharge = true;
+        return this;
+    }
+
+    public double calculate(Order order) {
+        return calculate(order, useRegional, useGeneral, useSurcharge);
+    }
+}
+```
+
+``` 
+double value = new TaxCalculator().withTaxRegional()
+                                  .withTaxSurcharge()
+                                  .calculate(order);
+```
+
+``` 
+public class TaxCalculator {
+   public DoubleUnaryOperator taxFunction = d -> d;
+
+    public TaxCalculator with(DoubleUnaryOperator f) {
+        taxFunction = taxFunction.andThen(f);
+        return this;
+    }
+
+    public double calculate(Order order) {
+        return taxFunction.applyAsDouble(order.getValue());
+    }
+}
+```
+
+``` 
+double value = new TaxCalculator().with(Tax::regional)
+                                  .with(Tax::surcharge)
+                                  .calculate(order);
+```
 #### 10.4 실생활의 자바 8 DSL
+![dsl patterns](images/dslPatterns.PNG)
 ##### 10.4.1 jOOQ
 ##### 10.4.2 큐컴버
 ##### 10.4.3 스프링 통합
