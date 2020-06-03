@@ -9,6 +9,8 @@
     - 이들 패턴을 자바 라이브러리와 도구에서 얼마나 흔히 사용하는가?
 * DSL
     - 특정 도메인을 대상으로 만들어진 특수 프로그래밍 언어
+    - 개발자와 도메인 전문가 사이의 간격을 좁히는 것이 목표
+
 * external DSL
     - 타 언어로 작성된 DSL
     - ex> SQL
@@ -185,90 +187,96 @@ List<String> errors = Files.lines(Paths.get(fileName))
     - DSL 문법을 익히는데 오래 걸림
 
 ##### 10.3.5 DSL에 메서드 참조 사용하기
-``` 
-public class Tax {
-    public static double regional(double value) {
-        return value * 1.1;
+* 세금 모델
+    ``` 
+    public class Tax {
+        public static double regional(double value) {
+            return value * 1.1;
+        }
+    
+        public static double general(double value) {
+            return value * 1.3;
+        }
+    
+        public static double surcharge(double value) {
+            return value * 1.05;
+        }
     }
-
-    public static double general(double value) {
-        return value * 1.3;
+    ```
+* 세금 적용
+    ``` 
+    public static double calculate(Order order, boolean useRegional,
+                                   boolean useGeneral, boolean useSurcharge) {
+        double value = order.getValue();
+        if (useRegional) value = Tax.regional(value);
+        if (useGeneral) value = Tax.general(value);
+        if (useSurcharge) value = Tax.surcharge(value);
+        return value;
     }
-
-    public static double surcharge(double value) {
-        return value * 1.05;
+    ```
+* 사용 예
+    ``` 
+    double value = calculate(order, true, false, true);
+    ```
+    - 가독성이 떨어짐
+    - 불리언 변수의 사용 순서를 인지하고 있어야 함
+    - 어떤 세금이 적용됐는지도 알기 어려움
+* 체이닝 방식을 이용한 리팩토링
+    ```
+    public class TaxCalculator {
+        private boolean useRegional;
+        private boolean useGeneral;
+        private boolean useSurcharge;
+    
+        public TaxCalculator withTaxRegional() {
+            useRegional = true;
+            return this;
+        }
+    
+        public TaxCalculator withTaxGeneral() {
+            useGeneral= true;
+            return this;
+        }
+    
+        public TaxCalculator withTaxSurcharge() {
+            useSurcharge = true;
+            return this;
+        }
+    
+        public double calculate(Order order) {
+            return calculate(order, useRegional, useGeneral, useSurcharge);
+        }
     }
-}
-```
-
-``` 
-public static double calculate(Order order, boolean useRegional,
-                               boolean useGeneral, boolean useSurcharge) {
-    double value = order.getValue();
-    if (useRegional) value = Tax.regional(value);
-    if (useGeneral) value = Tax.general(value);
-    if (useSurcharge) value = Tax.surcharge(value);
-    return value;
-}
-```
-
-``` 
-double value = calculate(order, true, false, true);
-```
-
-```
-public class TaxCalculator {
-    private boolean useRegional;
-    private boolean useGeneral;
-    private boolean useSurcharge;
-
-    public TaxCalculator withTaxRegional() {
-        useRegional = true;
-        return this;
+    ```
+* 사용 예
+    ``` 
+    double value = new TaxCalculator().withTaxRegional()
+                                      .withTaxSurcharge()
+                                      .calculate(order);
+    ```
+    - 코드가 장황함
+    - 각 세금에 해당하는 불리언 필드가 필요하므로 확장성도 제한적
+* 함수형 기능을 이용한 리팩토링
+    ``` 
+    public class TaxCalculator {
+        public DoubleUnaryOperator taxFunction = d -> d;
+    
+        public TaxCalculator with(DoubleUnaryOperator f) {
+            taxFunction = taxFunction.andThen(f);
+            return this;
+        }
+    
+        public double calculate(Order order) {
+            return taxFunction.applyAsDouble(order.getValue());
+        }
     }
-
-    public TaxCalculator withTaxGeneral() {
-        useGeneral= true;
-        return this;
-    }
-
-    public TaxCalculator withTaxSurcharge() {
-        useSurcharge = true;
-        return this;
-    }
-
-    public double calculate(Order order) {
-        return calculate(order, useRegional, useGeneral, useSurcharge);
-    }
-}
-```
-
-``` 
-double value = new TaxCalculator().withTaxRegional()
-                                  .withTaxSurcharge()
-                                  .calculate(order);
-```
-
-``` 
-public class TaxCalculator {
-   public DoubleUnaryOperator taxFunction = d -> d;
-
-    public TaxCalculator with(DoubleUnaryOperator f) {
-        taxFunction = taxFunction.andThen(f);
-        return this;
-    }
-
-    public double calculate(Order order) {
-        return taxFunction.applyAsDouble(order.getValue());
-    }
-}
-```
-
-``` 
-double value = new TaxCalculator().with(Tax::regional)
-                                  .with(Tax::surcharge)
-                                  .calculate(order);
-```
+    ```
+* 사용예
+    ``` 
+    double value = new TaxCalculator().with(Tax::regional)
+                                      .with(Tax::surcharge)
+                                      .calculate(order);
+    ```
 #### 10.4 실생활의 자바 8 DSL
 ![dsl patterns](images/dslPatterns.PNG)
 ##### 10.4.1 jOOQ
