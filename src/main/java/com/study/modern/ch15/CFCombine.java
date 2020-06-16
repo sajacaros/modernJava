@@ -8,11 +8,7 @@ import java.util.concurrent.*;
 public class CFCombine {
     public static void main(String[] args)
         throws ExecutionException, InterruptedException {
-        log.info("wait for jconsole");
-        Thread.sleep(20000);
-        ExecutorService executorService = new ThreadPoolExecutor(5, 10,
-            0L, TimeUnit.MILLISECONDS,
-            new LinkedBlockingQueue<>());
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
         int x = 1337;
 
         log.info("start");
@@ -23,19 +19,17 @@ public class CFCombine {
         executorService.submit(() -> b.complete(g(x)));
         log.info("complete : {}", c.get());
         executorService.shutdown();
-
-        Thread.sleep(30000);
-    }
-
-    private static Integer g(int x) throws InterruptedException {
-        Thread.sleep(30000);
-        log.info("ggggg");
-        return 2;
     }
 
     private static int f(int x) throws InterruptedException {
-        Thread.sleep(5000);
+        Thread.sleep(10000);
         log.info("fffff");
         return 1;
+    }
+
+    private static Integer g(int x) throws InterruptedException {
+        Thread.sleep(5000);
+        log.info("ggggg");
+        return 2;
     }
 }
