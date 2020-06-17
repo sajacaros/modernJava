@@ -231,8 +231,25 @@
     - 세가지 연산의 타이밍 다이어그램
         - ![](images/CompletableFuture.PNG)
 #### 15.5 발행-구독 그리고 리액티비 프로그래밍
+* [Flow API](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Flow.html)
+    - [Publisher](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Flow.Publisher.html)
+    - [Subscriber](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Flow.Subscriber.html)
+    - [Subscription](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Flow.Subscription.html)
+    - [Processor](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Flow.Processor.html)
+* Flow API 정리
+    - 구독자가 구독할 수 있는 발행자
+    - 이 연결을 구독(subscription)이라 함
+    - 연결을 이용해서 메시지(이벤트)를 전송
+    ![](images/pubsub.PNG)
 ##### 15.5.1 두 플로를 합치는 예제
-##### 15.5.2 역압력
+* [SimpleCell](../../src/main/java/com/study/modern/ch15/flow/SimpleCell.java)
+* [ArithmeticCell](../../src/main/java/com/study/modern/ch15/flow/ArithmeticCell.java)
+    - ![](images/flowSequence.png)
+##### 15.5.2 역압력(backpressure)
+* backpressure
+    - Publisher는 Subscription 객체를 만들어 Subscriber로 전달
+    - Subscriber는 이를 이용해 Publisher로 정보를 보냄
+    - [SubmissionPublisher](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/SubmissionPublisher.html)
 ##### 15.5.3 실제 역압력의 간단한 형태
 
 #### 15.6 리액티브 시스템 vs 리액티브 프로그래밍
