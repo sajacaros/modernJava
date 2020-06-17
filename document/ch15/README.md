@@ -152,10 +152,10 @@
         }
     } 
     ```
-    - A가 자는 동안 귀중한 스레드 자원을 점유
+    - A는 자는 동안 귀중한 스레드 자원을 점유
     - B는 다른 작업이 실행될 수 있도록 허용
 ##### 15.2.4 현실성 확인
-* 모든것을 비동기로 만드는 것은 불가능
+* 모든 것을 비동기로 만드는 것은 불가능
 * 개선된 동시성 API 사용을 권장
 ##### 15.2.5 비동기 API에서 예외는 어떻게 처리하는가?
 * 별도의 스레드에서 호출된 에러는 호출자의 범위와는 상관 없음
@@ -168,9 +168,7 @@
     - [API링크](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Flow.Subscriber.html)
     ```
     void f(int x, Subscriber<Integer> s); 
-    ```
-        
-    
+    ```    
 
 #### 15.3 박스와 채널 모델
 * 간단한 박스와 채널 다이어그램
@@ -188,7 +186,6 @@
         Future<Integer> a2 = executorService.submit(() -> q2(t));
         int result = r(a1.get(),a2.get());
         log.info("{}", result); 
-        
         ```
         - 병렬성을 극대화 하려면 p,q1,q2,r,s 모두 Future로 감싸야 함
     - CompletableFuture와 combinator를 이용한 방법
@@ -198,8 +195,8 @@
         ```
       
 #### 15.4 CompletableFuture와 콤비네이터를 이용한 동시성
-* 실행할 코드 없이 Future를 만들 수 있도록 허용
-* complete() 메서드를 이용해 값을 전달하여 다른 스레드가 완료할 수 있음
+* 실행 코드 없이 Future를 만들 수 있음
+* complete() 메서드를 통해 값을 전달하여 스레드를 완료할 수 있음
     ```
     ExecutorService executorService = Executors.newFixedThreadPool(10);
     int x = 1337;
@@ -212,7 +209,7 @@
     executorService.shutdown();
     ```
 * f가 긴 시간이 걸린다면 get에서의 블록킹 시간이 길어짐
-    - CompletableFuture<T>에 thenCombine 메서드를 사용함으로 효과적인 프로그래밍이 가능
+    - CompletableFuture<T>에 thenCombine 메서드를 사용하여 효과적인 프로그래밍이 가능
         ```
         CompletableFuture<V> thenCombine(CompletableFuture<U> other, BiFunction<T, U, V> fn);
         ```

@@ -14,7 +14,10 @@ public class CFCombine {
         log.info("start");
         CompletableFuture<Integer> a = new CompletableFuture<>();
         CompletableFuture<Integer> b = new CompletableFuture<>();
-        CompletableFuture<Integer> c = a.thenCombine(b, (y, z)-> y + z);
+        CompletableFuture<Integer> c = a.thenCombine(b, (y, z)-> {
+            log.info("cccc");
+            return y + z;
+        });
         executorService.submit(() -> a.complete(f(x)));
         executorService.submit(() -> b.complete(g(x)));
         log.info("complete : {}", c.get());
