@@ -227,7 +227,7 @@
         ```
     - 세가지 연산의 타이밍 다이어그램
         - ![](images/CompletableFuture.PNG)
-#### 15.5 발행-구독 그리고 리액티비 프로그래밍
+#### 15.5 발행-구독 그리고 리액티브 프로그래밍
 * [Flow API](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Flow.html)
     - [Publisher](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Flow.Publisher.html)
     - [Subscriber](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Flow.Subscriber.html)
