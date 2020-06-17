@@ -201,22 +201,35 @@
 * 실행할 코드 없이 Future를 만들 수 있도록 허용
 * complete() 메서드를 이용해 값을 전달하여 다른 스레드가 완료할 수 있음
     ```
-    public class CFComplete {
-        public static void main(String[] args)
-            throws ExecutionException, InterruptedException {
-            ExecutorService executorService = Executors.newFixedThreadPool(10);
-            int x = 1337;
-    
-            CompletableFuture<Integer> a = new CompletableFuture<>();
-            executorService.submit(() -> a.complete(f(x)));
-            int b = g(x);
-            log.info("{}", a.get() + b);
-    
-            executorService.shutdown();
-        }
-    }
+    ExecutorService executorService = Executors.newFixedThreadPool(10);
+    int x = 1337;
+
+    CompletableFuture<Integer> a = new CompletableFuture<>();
+    executorService.submit(() -> a.complete(f(x)));
+    int b = g(x);
+    log.info("{}", a.get() + b);
+
+    executorService.shutdown();
     ```
-    - f가 오래 걸린다면??
+* f가 긴 시간이 걸린다면 get에서의 블록킹 시간이 길어짐
+    - CompletableFuture<T>에 thenCombine 메서드를 사용함으로 효과적인 프로그래밍이 가능
+        ```
+        CompletableFuture<V> thenCombine(CompletableFuture<U> other, BiFunction<T, U, V> fn);
+        ```
+    - CompletableFuture를 이용한 구현
+        ```
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
+        int x = 1337;
+        CompletableFuture<Integer> a = new CompletableFuture<>();
+        CompletableFuture<Integer> b = new CompletableFuture<>();
+        CompletableFuture<Integer> c = a.thenCombine(b, (y, z)-> y + z);
+        executorService.submit(() -> a.complete(f(x)));
+        executorService.submit(() -> b.complete(g(x)));
+        log.info("complete : {}", c.get());
+        executorService.shutdown();
+        ```
+    - 세가지 연산의 타이밍 다이어그램
+        - ![](images/CompletableFuture.PNG)
 #### 15.5 발행-구독 그리고 리액티비 프로그래밍
 ##### 15.5.1 두 플로를 합치는 예제
 ##### 15.5.2 역압력
