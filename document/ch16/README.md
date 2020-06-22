@@ -1,9 +1,45 @@
 ### [CHAPTER 16 CompletableFuture : 안정적 비동기 프로그래밍](https://livebook.manning.com/book/modern-java-in-action/chapter-16/)
+* 이 장의 내용
+    - 비동기 작업을 만들고 결과 얻기
+    - 넌블록 동작으로 생산성 높이기
+    - 비동기 API를 비동기적으로 소비하기
+    - 동기 API를 비동기적으로 소비하기
+    - 두 개 이상의 비동기 연산을 파이프라인으로 만들고 합치기
+    - 비동기 작업 완료에 대응하기
 
 #### 16.1 Future의 단순 활용
+* 자바 5부터 [Future 인터페이스](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/Future.html) 를 제공
+    - 비동기 계산을 모델링하는데 Future 이용
+    - 계산이 끝났을 때 결과에 접근할 수 있는 참조 제공
+        ``` 
+        ExecutorService executor = Executors.newCachedThreadPool();
+        Future<Double> future = executor.submit(()-> doSomeLongComputation());
+        doSomethingElse();
+        try {
+            Double result = future.get(1, TimeUnit.SECONDS);
+        } catch (ExecutionException ee) {
+            // the computation threw an exception
+        } catch (InterruptedException ie) {
+            // the current thread was interrupted while waiting
+        } catch (TimeoutException te) {
+            // the timeout expired before the Future completion
+        }
+        ```
+    - ![](images/future.PNG)
 ##### 16.1.1 Future 제한
+* 여러 Future의 의존성을 표현하기 어려움
+* 기능 요구사항
+    - 비동기 계산 결과 합치기
+    - Future 집합이 실행하는 모든 태스크 기다리기
+    - Future 집합에서 가장 빨리 완료되는 태스크값 얻기
+    - 프로그램적으로 Future를 완료
+    - Future 완료 동작에 반응하여 추가 동작 수행
 ##### 16.1.2 CompletableFuture로 비동기 애플리케이션 만들기
-
+* 배울 점
+    - 비동기 API를 제공
+    - 동기 API를 넌블록으로 만드는 방법
+    - 비동기 동작의 완료에 대응하는 방법
+    
 #### 16.2 비동기 API 구현
 ##### 16.2.1 동기 메서드를 비동기 메서드로 변환
 ##### 16.2.2 에러 처리 방법
