@@ -41,13 +41,24 @@
     - 비동기 동작의 완료에 대응하는 방법
     
 #### 16.2 비동기 API 구현
+* [동기 방식으로 상점 구현](../../src/main/java/com/study/modern/ch16/ShopSync.java)
 ##### 16.2.1 동기 메서드를 비동기 메서드로 변환
+* [비동기 방식으로 상점 구현](../../src/main/java/com/study/modern/ch16/ShopAsync.java)
 ##### 16.2.2 에러 처리 방법
-
+* [비동기 방식 에러 처리 안 했을시](../../src/main/java/com/study/modern/ch16/ShopException.java)
+* [비동기 방식 에러 처리 했을 시](../../src/main/java/com/study/modern/ch16/ShopExceptionally.java)
+* [supplyAsync 메서드 이용](../../src/main/java/com/study/modern/ch16/ShopAsync.java)
 #### 16.3 비블록 코드 만들기
+* [동기 방식으로 상점 정보 요청하기](../../src/main/java/com/study/modern/ch16/nonblock/ShopTest.java)
 ##### 16.3.1 병렬 스트림으로 요청 병렬화하기
+* [병렬 스트림을 이용해 상점 정보 요청하기](../../src/main/java/com/study/modern/ch16/nonblock/ShopTest.java)
 ##### 16.3.2 CompletableFuture로 비동기 호출 구현하기
+* [CompletableFuture를 이용해 상점 정보 요청하기](../../src/main/java/com/study/modern/ch16/nonblock/ShopTest.java)
+    - ![](images/sequentialVSParallel.PNG)
 ##### 16.3.3 더 확장성이 좋은 해결 방법
+* 병렬 스트림과 CompletableFuture 
+    - 내부적으로 Runtime.getRunTime().availableProcessors()를 이용함
+    - 커스텀 Executor 적용하여 스레드를 늘리는 방안 검토
 ##### 16.3.4 커스텀 Executor 사용하기
 
 #### 16.4 비동기 작업 파이프라인 만들기
