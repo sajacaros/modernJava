@@ -62,19 +62,101 @@
 ##### 16.3.4 커스텀 Executor 사용하기
 * 스레드는의 크기는 상점 수 만큼 구축
     - 100 이하 추천
-    - * [CompletableFuture에 커스텀 Executor 적용](../../src/main/java/com/study/modern/ch16/nonblock/ShopTest.java)
+    - [CompletableFuture에 커스텀 Executor 적용](../../src/main/java/com/study/modern/ch16/nonblock/ShopTest.java)
 * I/O가 포함되지 않은 계산 중심의 작업일 경우 스트림 인터페이스 효율이 좋음
 * I/O가 포함된 경우 스레드 수를 조절할 수 있는 CompletableFuture가 좋음
 #### 16.4 비동기 작업 파이프라인 만들기
 ##### 16.4.1 할인 서비스 구현
 ##### 16.4.2 할인 서비스 사용
+* [간단한 findPrices 구현](../../src/main/java/com/study/modern/ch16/compose/BestDiscountPriceFinder.java)
 ##### 16.4.3 동기 작업과 비동기 작업 조합하기
+* [CompletableFuture의 composing을 이용한 findPrices 구현](../../src/main/java/com/study/modern/ch16/compose/BestDiscountPriceFinder.java)
+* ![](images/composing.PNG)
 ##### 16.4.4 독립 CompletableFutur와 비독립 CompletableFuture 합치기
+* [CompletableFuture의 combining을 이용한 findPrices 구현](../../src/main/java/com/study/modern/ch16/combine/BestExchangePriceFinder.java)
+* ![](images/combining.PNG)
 ##### 16.4.5 Future의 리플렉션과 CompletableFuture의 리플렉션
+* 자바7에서의 Combining 구현
+    ```
+    ExecutorService executor = Executors.newCachedThreadPool();
+    final Future<Double> futureRate = executor.submit(new Callable<Double>() {
+        public Double call() {
+            return exchangeService.getRate(Money.EUR, Money.USD);
+        }});
+    Future<Double> futurePriceInUSD = executor.submit(new Callable<Double>() {
+        public Double call() {
+            double priceInEUR = shop.getPrice(product);
+            return priceInEUR * futureRate.get();
+        }});
+    ```
 ##### 16.4.6 타임아웃 효과적으로 사용하기
-
+* 자바 9에서는 CompletableFuture에서 orTimeout 메서드 제공
+    ```
+    Future<Double> futurePriceInUSD =
+        CompletableFuture.supplyAsync(() -> shop.getPrice(product))
+        .thenCombine(
+            CompletableFuture.supplyAsync(
+                () ->  exchangeService.getRate(Money.EUR, Money.USD)),
+            (price, rate) -> price * rate
+        ))
+        .orTimeout(3, TimeUnit.SECONDS);
+    ```
+* 기본값 적용하기
+    ```
+    Future<Double> futurePriceInUSD =
+        CompletableFuture.supplyAsync(() -> shop.getPrice(product))
+        .thenCombine(
+            CompletableFuture.supplyAsync(
+                () -> exchangeService.getRate(Money.EUR, Money.USD)
+            ).completeOnTimeout(DEFAULT_RATE, 1, TimeUnit.SECONDS),
+            (price, rate) -> price * rate
+        ))
+        .orTimeout(3, TimeUnit.SECONDS); 
+    ```
 #### 16.5 CompleatbleFuture의 종료에 대응하는 방법
+* delay 개선(0.5 ~ 2.5 s)
+    ```
+    private static final Random random = new Random();
+    public static void randomDelay() {
+        int delay = 500 + random.nextInt(2000);
+        try {
+            Thread.sleep(delay);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    ```
 ##### 16.5.1 최저가격 검색 애플리케이션 리팩터링
+* Future Stream 반환
+    ```
+    public Stream<CompletableFuture<String>> findPricesStream(String product) {
+        return shops.stream()
+             .map(shop -> CompletableFuture.supplyAsync(
+                                   () -> shop.getPrice(product), executor))
+             .map(future -> future.thenApply(Quote::parse))
+             .map(future -> future.thenCompose(quote ->
+                  CompletableFuture.supplyAsync(
+                      () -> Discount.applyDiscount(quote), executor)));
+    } 
+    ```
+* 출력하기
+    ```
+    findPricesStream("myPhone").map(f -> f.thenAccept(System.out::println));
+    ```
+* 모든 출력 기다리기
+    ```
+    CompletableFuture[] futures = findPricesStream("myPhone")
+        .map(f -> f.thenAccept(System.out::println))
+        .toArray(size -> new CompletableFuture[size]);
+    CompletableFuture.allOf(futures).join();
+    ```
+* 출력 하나 기다리기
+    ```
+    CompletableFuture[] futures = findPricesStream("myPhone")
+        .map(f -> f.thenAccept(System.out::println))
+        .toArray(size -> new CompletableFuture[size]);
+    CompletableFuture.anyOf(futures).join();
+    ```
 ##### 16.5.2 응용
 
 #### 16.6 로드맵

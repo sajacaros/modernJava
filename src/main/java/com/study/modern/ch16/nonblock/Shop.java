@@ -21,7 +21,7 @@ public class Shop {
     }
 
     private double calculatorPrice(String product) {
-        delay(3000);
+        delay();
         return random.nextDouble() + product.charAt(0) + product.charAt(1);
     }
 

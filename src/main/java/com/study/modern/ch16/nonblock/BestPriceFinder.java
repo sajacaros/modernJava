@@ -1,35 +1,27 @@
 package com.study.modern.ch16.nonblock;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.juli.logging.Log;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
 import java.util.stream.IntStream;
 
-import static com.study.modern.ch16.Util.delay;
 import static java.util.stream.Collectors.toList;
 
 @Slf4j
-public class ShopTest {
+public class BestPriceFinder {
     List<Shop> shops;
     private final Executor executor;
 
 
-    ShopTest() {
-        shops = List.of(new Shop("BestPrice"),
-            new Shop("LetsSaveBig"),
-            new Shop("MyFavoriteShop"),
-            new Shop("BuyItAll"));
-        shops = new ArrayList<>(shops);
+    BestPriceFinder() {
+        shops = new ArrayList<>();
         IntStream.iterate(0, n -> n + 1)
-            .takeWhile(n -> n < 28)
-            .forEach(n -> shops.add(new Shop(String.valueOf(n))));
+            .takeWhile(n -> n < 10)
+            .forEach(n -> shops.add(new Shop(n+"Alphabat")));
         executor =
             Executors.newFixedThreadPool(
                 Math.min(shops.size(), 100),
@@ -82,25 +74,25 @@ public class ShopTest {
     public static void main(String[] args) {
         log.info("=== blocking call");
         long start = System.nanoTime();
-        log.info("{}", new ShopTest().findPrices("product"));
+        log.info("{}", new BestPriceFinder().findPrices("product"));
         long duration = (System.nanoTime() - start) / 1000000;
         log.info("Done in {} msecs", duration);
 
         log.info("=== parallelStream call");
         start = System.nanoTime();
-        log.info("{}", new ShopTest().findPricesWithStream("product"));
+        log.info("{}", new BestPriceFinder().findPricesWithStream("product"));
         duration = (System.nanoTime() - start) / 1000000;
         log.info("Done in {} msecs", duration);
 
         log.info("=== CompletableFuture call");
         start = System.nanoTime();
-        log.info("{}", new ShopTest().findPricesWithCompletable("product"));
+        log.info("{}", new BestPriceFinder().findPricesWithCompletable("product"));
         duration = (System.nanoTime() - start) / 1000000;
         log.info("Done in {} msecs", duration);
 
         log.info("=== CompletableFuture with executor call");
         start = System.nanoTime();
-        log.info("{}", new ShopTest().findPricesWithExecutor("product"));
+        log.info("{}", new BestPriceFinder().findPricesWithExecutor("product"));
         duration = (System.nanoTime() - start) / 1000000;
         log.info("Done in {} msecs", duration);
     }
