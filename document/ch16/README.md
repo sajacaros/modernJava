@@ -49,11 +49,11 @@
 * [비동기 방식 에러 처리 했을 시](../../src/main/java/com/study/modern/ch16/ShopExceptionally.java)
 * [supplyAsync 메서드 이용](../../src/main/java/com/study/modern/ch16/ShopAsync.java)
 #### 16.3 비블록 코드 만들기
-* [동기 방식으로 상점 정보 요청하기](../../src/main/java/com/study/modern/ch16/nonblock/ShopTest.java)
+* [동기 방식으로 상점 정보 요청하기](../../src/main/java/com/study/modern/ch16/nonblock/BestPriceFinder.java)
 ##### 16.3.1 병렬 스트림으로 요청 병렬화하기
-* [병렬 스트림을 이용해 상점 정보 요청하기](../../src/main/java/com/study/modern/ch16/nonblock/ShopTest.java)
+* [병렬 스트림을 이용해 상점 정보 요청하기](../../src/main/java/com/study/modern/ch16/nonblock/BestPriceFinder.java)
 ##### 16.3.2 CompletableFuture로 비동기 호출 구현하기
-* [CompletableFuture를 이용해 상점 정보 요청하기](../../src/main/java/com/study/modern/ch16/nonblock/ShopTest.java)
+* [CompletableFuture를 이용해 상점 정보 요청하기](../../src/main/java/com/study/modern/ch16/nonblock/BestPriceFinder.java)
     - ![](images/sequentialVSParallel.PNG)
 ##### 16.3.3 더 확장성이 좋은 해결 방법
 * 병렬 스트림과 CompletableFuture 
@@ -62,7 +62,7 @@
 ##### 16.3.4 커스텀 Executor 사용하기
 * 스레드는의 크기는 상점 수 만큼 구축
     - 100 이하 추천
-    - [CompletableFuture에 커스텀 Executor 적용](../../src/main/java/com/study/modern/ch16/nonblock/ShopTest.java)
+    - [CompletableFuture에 커스텀 Executor 적용](../../src/main/java/com/study/modern/ch16/nonblock/BestPriceFinder.java)
 * I/O가 포함되지 않은 계산 중심의 작업일 경우 스트림 인터페이스 효율이 좋음
 * I/O가 포함된 경우 스레드 수를 조절할 수 있는 CompletableFuture가 좋음
 #### 16.4 비동기 작업 파이프라인 만들기

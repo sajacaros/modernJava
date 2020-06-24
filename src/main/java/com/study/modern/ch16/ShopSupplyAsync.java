@@ -29,10 +29,13 @@ public class ShopSupplyAsync {
         try {
             futurePrice.get(10L, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
+            log.warn("occurred InterruptedException");
             e.printStackTrace();
         } catch (ExecutionException e) {
+            log.warn("occurred ExecutionException");
             e.printStackTrace();
         } catch (TimeoutException e) {
+            log.warn("occurred TimeoutException");
             e.printStackTrace();
         }
     }
