@@ -47,7 +47,7 @@
 ##### 16.2.2 에러 처리 방법
 * [비동기 방식 에러 처리 안 했을시](../../src/main/java/com/study/modern/ch16/ShopException.java)
 * [비동기 방식 에러 처리 했을 시](../../src/main/java/com/study/modern/ch16/ShopExceptionally.java)
-* [supplyAsync 메서드 이용](../../src/main/java/com/study/modern/ch16/ShopAsync.java)
+* [supplyAsync 메서드 이용](../../src/main/java/com/study/modern/ch16/ShopSupplyAsync.java)
 #### 16.3 비블록 코드 만들기
 * [동기 방식으로 상점 정보 요청하기](../../src/main/java/com/study/modern/ch16/nonblock/BestPriceFinder.java)
 ##### 16.3.1 병렬 스트림으로 요청 병렬화하기

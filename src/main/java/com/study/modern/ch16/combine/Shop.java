@@ -1,12 +1,14 @@
 package com.study.modern.ch16.combine;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Random;
 
 import static com.study.modern.ch16.Util.delay;
 import static com.study.modern.ch16.Util.format;
 
+@Slf4j
 public class Shop {
     @Getter
     private final String name;
@@ -18,7 +20,9 @@ public class Shop {
     }
 
     public String getPrice(String product) {
+        log.info("getPrice start");
         double price = calculatePrice(product);
+        log.info("getPrice end");
         Discount.Code code = Discount.Code.values()[random.nextInt(Discount.Code.values().length)];
         return name + ":" + price + ":" + code;
     }

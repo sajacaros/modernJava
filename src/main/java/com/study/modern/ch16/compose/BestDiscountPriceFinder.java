@@ -49,7 +49,7 @@ public class BestDiscountPriceFinder {
             .map(shop -> CompletableFuture.supplyAsync(
                 () -> shop.getPrice(product), executor)
             )
-            .map(future -> future.thenApply(Quote::parse))
+            .map(future -> future.thenApplyAsync(Quote::parse))
             .map(future -> future.thenCompose(quote ->
                     CompletableFuture.supplyAsync(() -> Discount.applyDiscount(quote), executor)
                 )
@@ -63,7 +63,7 @@ public class BestDiscountPriceFinder {
     public static void main(String[] args) {
         log.info("=== Discount call");
         long start = System.nanoTime();
-        log.info("{}", new BestDiscountPriceFinder().findPrices("product"));
+//        log.info("{}", new BestDiscountPriceFinder().findPrices("product"));
         long duration = (System.nanoTime() - start) / 1000000;
         log.info("Done in {} msecs", duration);
 
