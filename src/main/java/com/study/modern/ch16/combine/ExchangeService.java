@@ -1,7 +1,10 @@
 package com.study.modern.ch16.combine;
 
+import lombok.extern.slf4j.Slf4j;
+
 import static com.study.modern.ch16.Util.delay;
 
+@Slf4j
 public class ExchangeService {
     public static final double DEFAULT_RATE = 1.35;
 
@@ -16,7 +19,10 @@ public class ExchangeService {
     }
 
     public static double getRate(Money source, Money destination) {
-        return getRateWithDelay(source, destination);
+        log.info("getRate start");
+        double dummy =  getRateWithDelay(source, destination);
+        log.info("getRate end");
+        return dummy;
     }
 
     private static double getRateWithDelay(Money source, Money destination) {

@@ -20,12 +20,12 @@ public class BestExchangePriceFinder {
     BestExchangePriceFinder() {
         shops = new ArrayList<>();
         IntStream.iterate(0, n -> n + 1)
-            .takeWhile(n -> n < 20)
-            .forEach(n -> shops.add(new Shop(n+"Alphabat")));
+            .takeWhile(n -> n < 15)
+            .forEach(n -> shops.add(new Shop(n + "Alphabat")));
 
         executor =
             Executors.newFixedThreadPool(
-                Math.min(shops.size()*2, 100),
+                Math.min(shops.size(), 100),
                 r -> {
                     Thread t = new Thread(r);
                     t.setDaemon(true);
@@ -39,16 +39,21 @@ public class BestExchangePriceFinder {
             .map(shop -> CompletableFuture.supplyAsync(
                 () -> shop.getPrice(product), executor)
             ).map(future -> future.thenApply(Quote::parse))
-            .map(future -> future.thenComposeAsync(quote ->
-                    CompletableFuture.supplyAsync(() -> Discount.applyDiscount(quote), executor), executor
+            .map(future -> future.thenCompose(quote ->
+                    CompletableFuture.supplyAsync(() -> Discount.applyDiscount(quote), executor)
                 )
             )
             .map(future -> future.thenCombine(
-                CompletableFuture.supplyAsync(()-> ExchangeService.getRate(ExchangeService.Money.EUR, ExchangeService.Money.USD)),
-                (price, rate) -> price * rate
+                    CompletableFuture.supplyAsync(() -> ExchangeService.getRate(ExchangeService.Money.EUR, ExchangeService.Money.USD)),
+                    (price, rate) -> {
+                        double result = price * rate;
+                        log.info("combine complete, result : {}", result);
+                        return result;
+                    }
                 )
             )
             .collect(toList());
+        log.info("test");
         return priceFutures.stream()
             .map(CompletableFuture::join)
             .collect(toList());
