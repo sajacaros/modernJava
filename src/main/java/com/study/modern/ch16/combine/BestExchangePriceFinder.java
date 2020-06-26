@@ -20,12 +20,13 @@ public class BestExchangePriceFinder {
     BestExchangePriceFinder() {
         shops = new ArrayList<>();
         IntStream.iterate(0, n -> n + 1)
-            .takeWhile(n -> n < 15)
+            .takeWhile(n -> n < 30)
             .forEach(n -> shops.add(new Shop(n + "Alphabat")));
 
         executor =
             Executors.newFixedThreadPool(
-                Math.min(shops.size(), 100),
+//                Math.min(shops.size(), 100),
+                100,
                 r -> {
                     Thread t = new Thread(r);
                     t.setDaemon(true);
@@ -44,7 +45,7 @@ public class BestExchangePriceFinder {
                 )
             )
             .map(future -> future.thenCombine(
-                    CompletableFuture.supplyAsync(() -> ExchangeService.getRate(ExchangeService.Money.EUR, ExchangeService.Money.USD)),
+                    CompletableFuture.supplyAsync(() -> ExchangeService.getRate(ExchangeService.Money.EUR, ExchangeService.Money.USD), executor),
                     (price, rate) -> {
                         double result = price * rate;
                         log.info("combine complete, result : {}", result);
