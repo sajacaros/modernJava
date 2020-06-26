@@ -75,6 +75,9 @@
 ##### 16.4.4 독립 CompletableFutur와 비독립 CompletableFuture 합치기
 * [CompletableFuture의 combining을 이용한 findPrices 구현](../../src/main/java/com/study/modern/ch16/combine/BestExchangePriceFinder.java)
 * ![](images/combining.PNG)
+    - 스레드 풀을 어떤걸 쓰냐에 따라 걸린 시간이 달라짐.
+    - 스레드풀 지정안할시 forkJoinThreadPool을 쓰기때문에 하드웨어의 core개수에 영향을 받음
+    - 예제에서 지정한 스레드풀을 공용으로 사용시 상점의 2배로 스레풀을 설정해 줘야함
 ##### 16.4.5 Future의 리플렉션과 CompletableFuture의 리플렉션
 * 자바7에서의 Combining 구현
     ```

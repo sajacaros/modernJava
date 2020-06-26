@@ -25,8 +25,7 @@ public class BestExchangePriceFinder {
 
         executor =
             Executors.newFixedThreadPool(
-//                Math.min(shops.size(), 100),
-                100,
+                Math.min(shops.size()*2, 100),
                 r -> {
                     Thread t = new Thread(r);
                     t.setDaemon(true);
@@ -54,7 +53,6 @@ public class BestExchangePriceFinder {
                 )
             )
             .collect(toList());
-        log.info("test");
         return priceFutures.stream()
             .map(CompletableFuture::join)
             .collect(toList());
